@@ -1,83 +1,51 @@
-document.addEventListener('DOMContentLoaded',function(){
-    readyFunc();
-    resizeinit();
-});
+window.addEventListener('DOMContentLoaded', function() {
+    getShadowNull();
+    initFunc();
+})
 
-function readyFunc(ff){
-    var canvas = document.getElementById('canvas');
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-    canvas.setAttribute('width',width);
-    canvas.setAttribute('height',height);
-    if(canvas.getContext){
-        var ctx = canvas.getContext('2d');
-        var ctx1 = canvas.getContext('2d');
-        var isDrawing = false;
-        canvas.addEventListener("mousedown",function(e){
-            isDrawing = true;
-        })
-        canvas.addEventListener("mouseup",function(e){
-            isDrawing = false;
-        })
-        canvas.addEventListener("mousemove",function(e) {
-            if(isDrawing){
-                position = getPosition(canvas,e);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.strokeRect(position.x,position.y,2*(width/2 - position.x), 2*(height/2 - position.y));
-                console.log(width/2 - position.x);
-                ctx.fillText("x: "+position.x +", y:" + position.y, 10, 10);
-                drawTri();
-            }
-          })
+function initFunc(){
+    draw();
+}
 
-          function drawTri(){
-            ctx1.beginPath();
-            ctx1.moveTo(75,50);
-            ctx1.lineTo(100,75);
-            ctx1.lineTo(100,25);
-            ctx1.lineTo(75,50);
-            ctx1.stroke();
-            ctx1.closePath();
-          }
-          
-          
-          
-          function getPosition(p,e) {
-          
-             var a = p.getBoundingClientRect();
-             return {
-               x : e.clientX - a.left,
-               y : e.clientY - a.top
-             };
-          }
-        
-        // var radius = height/2;
-        // ctx.clea
-        // ctx.strokeStyle='#000';
-        // ctx.moveTo(width/2 + radius, height/2 );
-        // ctx.arc(width/2 ,height/2,radius,0,2*Math.PI,true);
-        // ctx.fill();
+function getShadowNull(){
+    var shadowExist = document.getElementById('shadow-null');
+    if(!shadowExist){
+        var shadowNull= document.createElement('div');
+        shadowNull.id='shadow-null';
+        shadowNull.setAttribute('style',
+            'position:fixed;'+
+            'z-index:-99999999999999999999999999999999999999999;'+
+            'pointer-events:none;'+
+            'width:100%;'+
+            'height:100%;'+
+            'top:0;'+
+            'left:0;'
+        )
+        document.body.appendChild(shadowNull);
     }
     else{
+        var shadowNullData = {
+            width:shadowExist.getBoundingClientRect().width,
+            height:shadowExist.getBoundingClientRect().height
+        }
+        return shadowNullData;
     }
+    
 }
 
-function resizeinit(){
-    var resize = debounce(readyFunc,50,false);
-    window.addEventListener('resize',resize);
-}
+function debounce(func, delay) {
+    var timer = null;
+    return function () {
+      var context = this;
+      var args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        func.apply(context, args)
+      }, delay);
+    }
+  }
 
-function debounce(func, wait, immediate) {
-   var timeout;
-   return function() {
-      var context = this, args = arguments;
-      var later = function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-          };
-       var callNow = immediate && !timeout;
-       clearTimeout(timeout);
-       timeout = setTimeout(later, wait);
-       if (callNow) func.apply(context, args);
-   };
-};
+
+function draw(){
+    var canvas = document.getElementById('canvas');
+}

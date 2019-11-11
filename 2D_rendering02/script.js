@@ -42,7 +42,7 @@ function draw(){
                 _this.func.sizeCanvas();
                 _this.func.createBallsData();
                 _this.func.setballPhysics();
-                // _this.func.injectMouseData(); 未完成
+                _this.func.injectMouseData(); 未完成
             }
             bootFunc();
             var resizeFunc = function(){
@@ -52,7 +52,7 @@ function draw(){
         },
         data:{
             ballarray:[],
-            ballnum:100,
+            ballnum:500,
             mouseData:{}
         },
         func:{
@@ -65,11 +65,11 @@ function draw(){
             },
             injectMouseData: function(){
 
-                window.addEventListener('mousedown',function(e){
+                window.addEventListener('mousemove',function(e){
                     canvasObj.data.mouseData.x = e.clientX;
                     canvasObj.data.mouseData.y = e.clientY;
                 })
-                window.addEventListener('mouseup',function(e){
+                window.addEventListener('mouseleave',function(e){
                     canvasObj.data.mouseData.x = null;
                     canvasObj.data.mouseData.y = null;
                 })
@@ -130,12 +130,7 @@ function draw(){
                     var newLocX = canvasObj.data.ballarray[j].style.location.x+speedX;
                     var newLocY = canvasObj.data.ballarray[j].style.location.y+speedY;
                     
-                    if(Math.abs(newLocX-canvasObj.data.mouseData.x)<300){
-                        canvasObj.data.ballarray[j].physics.speedX = -speedX*1.000;
-                    }
-                    if(Math.abs(newLocY-canvasObj.data.mouseData.y)<300){
-                        canvasObj.data.ballarray[j].physics.speedY = -speedY*1.000;
-                    }
+                    
                     if(newLocX>getShadowNull().width||newLocX<0){
                         canvasObj.data.ballarray[j].physics.speedX = -speedX;
                     }
