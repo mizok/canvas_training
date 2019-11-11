@@ -55,8 +55,8 @@ function draw(){
                 pointData:[],
                 isDrawing:false,
                 brushStyle:{
-                    color:"brown",
-                    radius:30,
+                    color:"rgba(0,0,0,.5)",
+                    radius:10,
                 }
             },
             func:{
