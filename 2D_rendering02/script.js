@@ -42,7 +42,7 @@ function draw(){
                 _this.func.sizeCanvas();
                 _this.func.createBallsData();
                 _this.func.setballPhysics();
-                _this.func.injectMouseData(); 未完成
+                _this.func.injectMouseData(); 
             }
             bootFunc();
             var resizeFunc = function(){
