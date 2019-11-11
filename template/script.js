@@ -52,19 +52,13 @@ function draw(){
         var canvasObj = {
             ctx:canvas.getContext('2d'),
             data:{
-                pointData:[],
-                isDrawing:false,
-                brushStyle:{
-                    color:"rgba(0,0,0,.5)",
-                    radius:10,
-                }
+                pointData:[]
             },
             func:{
                 canvasInit :function(){
                     var _this=this; 
                     var bootFunc = function(){
                         _this.sizeCanvas();
-                        _this.brush()
                     }
                     bootFunc();
                     var resizeFunc = function(){
@@ -75,27 +69,6 @@ function draw(){
                 sizeCanvas:function(){
                     canvas.width = window.innerWidth;
                     canvas.height = window.innerHeight;
-                },
-                brush:function(){
-                    window.addEventListener('mousedown',function(e){
-                        canvasObj.data.isDrawing = true;
-                        canvasObj.ctx.beginPath();
-                        canvasObj.ctx.lineCap='round';
-                        canvasObj.ctx.lineJoin='round';
-                        canvasObj.ctx.lineWidth=canvasObj.data.brushStyle.radius;
-                        canvasObj.ctx.strokeStyle = canvasObj.data.brushStyle.color;
-                        canvasObj.ctx.shadowBlur = 10;
-                        canvasObj.ctx.shadowColor = canvasObj.data.brushStyle.color;
-                    })
-                    window.addEventListener('mouseup',function(){
-                        canvasObj.data.isDrawing = false;
-                    })
-                    window.addEventListener('mousemove',function(e){
-                        if(canvasObj.data.isDrawing){
-                            canvasObj.ctx.lineTo(e.clientX,e.clientY);
-                            canvasObj.ctx.stroke();
-                        }
-                    })
                 }
             }
         }
