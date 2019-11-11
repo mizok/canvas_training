@@ -42,7 +42,7 @@ function draw(){
                 _this.func.sizeCanvas();
                 _this.func.createBallsData();
                 _this.func.setballPhysics();
-                // _this.func.injectMouseData(); 未完成
+                _this.func.injectMouseData(); 
             }
             bootFunc();
             var resizeFunc = function(){
@@ -52,26 +52,24 @@ function draw(){
         },
         data:{
             ballarray:[],
-            ballnum:100,
-            mouseData:{}
+            ballnum:5,
+            mouseData:{},
+            repulsiveDist:100
         },
         func:{
-            getParent:function(){
-                return canvasObj;
-            },
             sizeCanvas:function(){
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             },
             injectMouseData: function(){
 
-                window.addEventListener('mousedown',function(e){
+                window.addEventListener('mousemove',function(e){
                     canvasObj.data.mouseData.x = e.clientX;
                     canvasObj.data.mouseData.y = e.clientY;
                 })
-                window.addEventListener('mouseup',function(e){
-                    canvasObj.data.mouseData.x = null;
-                    canvasObj.data.mouseData.y = null;
+                window.addEventListener('mouseleave',function(e){
+                    canvasObj.data.mouseData.x = -99999999999999999999999999;
+                    canvasObj.data.mouseData.y = -99999999999999999999999999;
                 })
 
             },
@@ -85,7 +83,7 @@ function draw(){
                         },
                         lineWidth:.5,
                         lineColor:"#999999",
-                        radius:10
+                        radius:50
                     },
                     physics:{
                         speedX:5*Math.random() * (Math.floor(Math.random()*2) == 1 ? 1 : -1),
@@ -104,7 +102,6 @@ function draw(){
                             true
                             );
                         ctx.stroke();
-                        ctx.save();
                         ctx.closePath();
                     }
                 }
@@ -112,6 +109,7 @@ function draw(){
             },
             createBallsData:function(){
                 var num =  canvasObj.data.ballnum;
+              
                 for(var i=0; i<num;i++){
                     canvasObj.data.ballarray[i] = this.createABall();
                     canvasObj.data.ballarray[i].draw();
@@ -120,9 +118,9 @@ function draw(){
 
             },
             setballPhysics:function(){
-                // canvasObj.ctx.clearRect(0, 0, canvas.width, canvas.height);
-                canvasObj.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-                canvasObj.ctx.fillRect(0, 0, canvas.width, canvas.height);
+                canvasObj.ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // canvasObj.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                // canvasObj.ctx.fillRect(0, 0, canvas.width, canvas.height);
                 var num =  canvasObj.data.ballnum;
                 for(var j=0; j<num;j++){
                     var speedX= canvasObj.data.ballarray[j].physics.speedX;
@@ -130,12 +128,41 @@ function draw(){
                     var newLocX = canvasObj.data.ballarray[j].style.location.x+speedX;
                     var newLocY = canvasObj.data.ballarray[j].style.location.y+speedY;
                     
-                    if(Math.abs(newLocX-canvasObj.data.mouseData.x)<300){
-                        canvasObj.data.ballarray[j].physics.speedX = -speedX*1.000;
+                    // 計算滑鼠位置與該粒子的距離
+                    var distX = canvasObj.data.mouseData.x - newLocX;
+                    var distY = canvasObj.data.mouseData.y - newLocY;
+                    var dist = Math.sqrt(Math.pow(distX,2)+Math.pow(distY,2));
+                    if(dist<=canvasObj.data.repulsiveDist+canvasObj.data.ballarray[j].style.radius+canvasObj.data.ballarray[j].style.lineWidth){
+                        //滑鼠點擊與粒子碰撞
+                        // 計算碰撞當下粒子跟滑鼠中心的連線(法線)和水平線的夾角
+                        var angle_1 = Math.atan(distY/distX);
+                        // 計算當前速度向量跟水平線的夾角
+                        var angle_2 = Math.atan(speedY/speedX); 
+                        // 計算反射角
+                        var angle_3 = 2*angle_1-angle_2;
+                        // 計算當前速度向量的純量值
+                        var speed_total = Math.sqrt(Math.pow(speedX,2)+Math.pow(speedY,2));
+                        // 計算新的水平向量
+                        var new_speedX  = Math.cos(angle_3)*speed_total;
+                        // 計算新的垂直向量
+                        var new_speedY = Math.sin(angle_3)*speed_total;
+                        if(canvasObj.data.ballarray[j].physics.speedX>0){
+                            canvasObj.data.ballarray[j].physics.speedX = -new_speedX;
+                        }
+                        else{
+                            canvasObj.data.ballarray[j].physics.speedX = new_speedX;
+                        }
+                        if(canvasObj.data.ballarray[j].physics.speedY>0){
+                            canvasObj.data.ballarray[j].physics.speedY = -new_speedY;
+                        }
+                        else{
+                            canvasObj.data.ballarray[j].physics.speedY = new_speedY;
+                        }
+                        
+                        
+                        
                     }
-                    if(Math.abs(newLocY-canvasObj.data.mouseData.y)<300){
-                        canvasObj.data.ballarray[j].physics.speedY = -speedY*1.000;
-                    }
+                    
                     if(newLocX>getShadowNull().width||newLocX<0){
                         canvasObj.data.ballarray[j].physics.speedX = -speedX;
                     }
@@ -148,27 +175,29 @@ function draw(){
                     canvasObj.data.ballarray[j].style.location.y += canvasObj.data.ballarray[j].physics.speedY;
                     canvasObj.data.ballarray[j].draw();
                 }
-                
+                canvasObj.ctx.beginPath();
+                canvasObj.ctx.arc(canvasObj.data.mouseData.x,canvasObj.data.mouseData.y,canvasObj.data.repulsiveDist,0,Math.PI*2,true);
+                canvasObj.ctx.fillStyle = "#999999";
+                canvasObj.ctx.fill();
+                canvasObj.ctx.restore();
                 window.requestAnimationFrame(canvasObj.func.setballPhysics)
             }
         }
     }
     if (canvas) {
         canvasObj.canvasInit();
+        console.log(canvasObj.data.ballarray)
     }
 }
 
-
-
-
 function debounce(func, delay) {
-    var timer = null;
-    return function () {
-      var context = this;
-      var args = arguments;
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        func.apply(context, args)
-      }, delay);
-    }
+  var timer = null;
+  return function () {
+    var context = this;
+    var args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      func.apply(context, args)
+    }, delay);
   }
+}
