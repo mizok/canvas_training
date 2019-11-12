@@ -53,7 +53,8 @@ function draw(){
         data:{
             ballarray:[],
             ballnum:100,
-            mouseData:{}
+            mouseData:{},
+            repulsiveDist:100
         },
         func:{
             sizeCanvas:function(){
@@ -114,7 +115,6 @@ function draw(){
                     canvasObj.data.ballarray[i].draw();
                 }
                 
-
             },
             setballPhysics:function(){
                 // canvasObj.ctx.clearRect(0, 0, canvas.width, canvas.height);
