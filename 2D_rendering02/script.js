@@ -117,9 +117,9 @@ function draw(){
 
             },
             setballPhysics:function(){
-                canvasObj.ctx.clearRect(0, 0, canvas.width, canvas.height);
-                // canvasObj.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-                // canvasObj.ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // canvasObj.ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvasObj.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                canvasObj.ctx.fillRect(0, 0, canvas.width, canvas.height);
                 var num =  canvasObj.data.ballnum;
                 for(var j=0; j<num;j++){
                     var speedX= canvasObj.data.ballarray[j].physics.speedX;
