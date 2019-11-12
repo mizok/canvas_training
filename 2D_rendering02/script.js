@@ -52,14 +52,8 @@ function draw(){
         },
         data:{
             ballarray:[],
-<<<<<<< HEAD
-            ballnum:5,
-            mouseData:{},
-            repulsiveDist:100
-=======
-            ballnum:500,
+            ballnum:100,
             mouseData:{}
->>>>>>> 64db075756f197829c0e70a756e69e9c39549d97
         },
         func:{
             sizeCanvas:function(){
@@ -73,13 +67,8 @@ function draw(){
                     canvasObj.data.mouseData.y = e.clientY;
                 })
                 window.addEventListener('mouseleave',function(e){
-<<<<<<< HEAD
-                    canvasObj.data.mouseData.x = -99999999999999999999999999;
-                    canvasObj.data.mouseData.y = -99999999999999999999999999;
-=======
                     canvasObj.data.mouseData.x = null;
                     canvasObj.data.mouseData.y = null;
->>>>>>> 64db075756f197829c0e70a756e69e9c39549d97
                 })
 
             },
@@ -93,7 +82,7 @@ function draw(){
                         },
                         lineWidth:.5,
                         lineColor:"#999999",
-                        radius:50
+                        radius:10
                     },
                     physics:{
                         speedX:5*Math.random() * (Math.floor(Math.random()*2) == 1 ? 1 : -1),
@@ -138,7 +127,6 @@ function draw(){
                     var newLocX = canvasObj.data.ballarray[j].style.location.x+speedX;
                     var newLocY = canvasObj.data.ballarray[j].style.location.y+speedY;
                     
-<<<<<<< HEAD
                     // 計算滑鼠位置與該粒子的距離
                     var distX = canvasObj.data.mouseData.x - newLocX;
                     var distY = canvasObj.data.mouseData.y - newLocY;
@@ -173,8 +161,6 @@ function draw(){
                         
                         
                     }
-=======
->>>>>>> 64db075756f197829c0e70a756e69e9c39549d97
                     
                     if(newLocX>getShadowNull().width||newLocX<0){
                         canvasObj.data.ballarray[j].physics.speedX = -speedX;
