@@ -11,7 +11,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var _x = {
   x: 1
 };
-x = _x.x;
+var x = _x.x;
 
 var RippleScreen = /*#__PURE__*/function () {
   function RippleScreen(ele) // 波紋透明度
